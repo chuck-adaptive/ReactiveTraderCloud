@@ -13,6 +13,7 @@ import {
   popInIcon,
 } from 'apps/SimpleLauncher/icons'
 import ReactGA from 'react-ga'
+import { OpenFinSnapshotButton } from './OpenFinSnapshotSelection'
 
 export interface ControlProps {
   minimize?: () => void
@@ -140,6 +141,7 @@ export const OpenFinFooter: React.FC = ({ ...props }) => (
   <StatusBar>
     <FooterControl>
       <OpenFinContactButton />
+      <OpenFinSnapshotButton />
       <StatusButtonContainer />
     </FooterControl>
   </StatusBar>
