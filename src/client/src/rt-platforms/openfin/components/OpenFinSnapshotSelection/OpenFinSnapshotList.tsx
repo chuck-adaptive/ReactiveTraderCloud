@@ -1,17 +1,8 @@
-import React, {
-  KeyboardEventHandler,
-  SyntheticEvent,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react'
+import React, { KeyboardEventHandler, useCallback, useEffect, useState } from 'react'
 import {
-  Button,
-  CloseButton,
   ErrorAlert,
   FormControl,
   HrBar,
-  Root,
   StatusCircle,
   TextInput,
   TextInputLabel,
@@ -22,17 +13,13 @@ import {
   SnapshotRoot,
   Background,
 } from './styled'
-import { Flex, Modal } from 'rt-components'
 import { SnapshotActiveStatus } from 'rt-types'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import {
   applySnapshotFromStorage,
   getCurrentSnapshotName,
   getSnapshotNames,
   saveSnapshotToStorage,
 } from './utils'
-import { createOpenFinPopup, Offset, showOpenFinPopup } from '../utils'
 
 type SnapshotError = {
   message: string
@@ -41,41 +28,15 @@ type SnapshotError = {
 
 const OpenFinSnapshotList: React.FC = props => {
   const [isLoading, setIsLoading] = useState<string>('')
-  const [isOpen, setIsOpen] = useState<boolean>(false)
   const [isSaving, setIsSaving] = useState<boolean>(false)
   const [newSnapshotName, setNewSnapshotName] = useState<string>('')
   const [snapshotError, setSnapshotError] = useState<SnapshotError>()
-
-  //region Callbacks
-
-  const toggleOpen = useCallback(
-    async (event: SyntheticEvent) => {
-      const isAppUrl = (element: any) => element instanceof HTMLInputElement
-      if (!isAppUrl(event.target) && !isLoading && !isSaving) {
-        const currWin = await fin.Window.getCurrent()
-        const views = await currWin.getCurrentViews()
-        if (isOpen) {
-          views.forEach(v => v.show())
-          setNewSnapshotName('')
-          setSnapshotError(undefined)
-        } else {
-          views.forEach(v => v.hide())
-        }
-        setIsOpen(!isOpen)
-      }
-    },
-    [isLoading, isOpen, isSaving]
-  )
 
   const textInputRef = useCallback((node: any) => {
     if (!!node) {
       node.addEventListener('focus', () => setSnapshotError(undefined))
     }
   }, [])
-
-  //endregion
-
-  //region Effects
 
   useEffect(() => {
     if (isSaving && newSnapshotName) {
@@ -108,10 +69,6 @@ const OpenFinSnapshotList: React.FC = props => {
         })
     }
   }, [isLoading])
-
-  //endregion
-
-  //region Handlers
 
   const snapshotListContent = () => {
     const currentSnapshotName = getCurrentSnapshotName()
@@ -146,7 +103,6 @@ const OpenFinSnapshotList: React.FC = props => {
 
   const handleSnapshotSubmission: KeyboardEventHandler<HTMLInputElement> = e => {
     if (e.key === 'Enter' && !!newSnapshotName && !getSnapshotNames().includes(newSnapshotName)) {
-      window.alert('i am KAZAAM!')
       e.preventDefault()
       setIsSaving(true)
     }
